@@ -1,6 +1,73 @@
-<p>signup works!</p>
+<div id="wrapper">
+  <div class="wrapper fade-in-down">
+    <div id="form-content">
+      <!-- Tabs Titles -->
 
-<hr>
-<a routerLink="/login" routerLinkActive="selected">Login</a><br>
-<a routerLink="/signup" routerLinkActive="selected">Signup</a><br>
-<a routerLink="/home" routerLinkActive="selected">Home</a><br>
+      <!-- Icon -->
+      <div class="fade-in first">
+        <img src="" id="icon" alt="Signup Icon" />
+        <div class="col-lg-12 col-sm-12 col-12 user-img">
+          <img src="/assets/signup.png">
+        </div>
+      </div>
+
+      <!-- Register Form -->
+      <form novalidate [formGroup]="registerForm" (ngSubmit)="register()">
+        <div class="form-group" [ngClass]="{
+        'text-danger': username?.invalid && (username?.dirty || username?.touched),
+        'text-success': username?.valid && (username?.dirty || username?.touched)}">
+          <input type="text" formControlName="username" required id="username" class="fade-in first form-input" name="username"
+            placeholder="nome de usuário">
+          <div class="form-control-feedback" *ngIf="username?.errors && (username?.dirty || username?.touched)">
+            <p *ngIf="username?.errors?.required">Campo obrigatório</p>
+          </div>
+        </div>
+        <div class="form-group" [ngClass]="{
+          'text-danger': email?.invalid && (email?.dirty || email?.touched),
+          'text-success': email?.valid && (email?.dirty || email?.touched)}">
+            <input type="email" formControlName="email" required id="email" class="fade-in second form-input" name="email"
+              placeholder="email">
+            <div class="form-control-feedback" *ngIf="email?.errors && (email?.dirty || email?.touched)">
+              <p *ngIf="email?.errors?.required">Campo obrigatório</p>
+            </div>
+          </div>
+        <div class="form-group" [ngClass]="{
+          'text-danger': confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched),
+          'text-success': confirmPassword?.valid && (confirmPassword?.dirty || confirmPassword?.touched)}">
+            <input type="password" formControlName="confirmPassword" required id="confirmPassword" class="fade-in third form-input" name="confirmPassword"
+              placeholder="senha">
+            <div class="form-control-feedback" *ngIf="confirmPassword?.errors && (confirmPassword?.dirty || confirmPassword?.touched)">
+              <p *ngIf="confirmPassword?.errors?.required">Campo obrigatório</p>
+              <p *ngIf="confirmPassword?.errors?.minlength">A senha deve ter 8 caracteres, no mínimo. Falta mais
+                {{confirmPassword?.errors?.minlength?.requiredLength - confirmPassword?.errors?.minlength?.actualLength}} para a
+                quantidade mínima</p>
+            </div>
+          </div>
+        <div class="form-group" [ngClass]="{
+        'text-danger': password?.invalid && (password?.dirty || password?.touched),
+        'text-success': password?.valid && (password?.dirty || password?.touched)}">
+          <input type="password" formControlName="password" required id="password" class="fade-in fourth form-input" name="password"
+            placeholder="confirmar senha">
+          <div class="form-control-feedback" *ngIf="password?.errors && (password?.dirty || password?.touched)">
+            <p *ngIf="password?.errors?.required">Campo obrigatório</p>
+            <p *ngIf="password?.errors?.minlength">A senha deve ter 8 caracteres, no mínimo. Falta mais
+              {{password?.errors?.minlength?.requiredLength - password?.errors?.minlength?.actualLength}} para a
+              quantidade mínima</p>
+          </div>
+        </div>
+        <input type="submit" class="fade-in fourth" value="Registrar">
+        <div hidden="isSubmiting" class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </form>
+
+      <!-- Remind Passowrd -->
+      <div id="form-footer" class="d-flex flex-column justify-content-between">
+        <div>
+          <span>Já tem uma conta? </span><a routerLink="/login" routerLinkActive="selected" class="underline-hover" href="javascript: void(0);">Entrar</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,33 +1,52 @@
-<p>login works!</p>
+<div id="wrapper">
+  <div class="wrapper fade-in-down">
+    <div id="form-content">
+      <!-- Tabs Titles -->
 
-<hr>
-<a routerLink="/login" routerLinkActive="selected">Login</a><br>
-<a routerLink="/signup" routerLinkActive="selected">Signup</a><br>
-<a routerLink="/home" routerLinkActive="selected">Home</a><br>
-
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
-
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <img src="" id="icon" alt="User Icon" />
-      <div class="col-lg-12 col-sm-12 col-12 user-img">
-        <img src="/assets/login.png">
+      <!-- Icon -->
+      <div class="fade-in first">
+        <img src="" id="icon" alt="User Icon" />
+        <div class="col-lg-12 col-sm-12 col-12 user-img">
+          <img src="/assets/login.png">
+        </div>
       </div>
+
+      <!-- Login Form -->
+      <form novalidate [formGroup]="loginform" (ngSubmit)="login()">
+        <div class="form-group" [ngClass]="{
+        'text-danger': username?.invalid && (username?.dirty || username?.touched),
+        'text-success': username?.valid && (username?.dirty || username?.touched)}">
+          <input type="text" formControlName="username" required id="username" class="fade-in second form-input" name="username"
+            placeholder="nome de usuário">
+          <div class="form-control-feedback" *ngIf="username?.errors && (username?.dirty || username?.touched)">
+            <p *ngIf="username?.errors?.required">Campo obrigatório</p>
+          </div>
+        </div>
+        <div class="form-group" [ngClass]="{
+        'text-danger': password?.invalid && (password?.dirty || password?.touched),
+        'text-success': password?.valid && (password?.dirty || password?.touched)}">
+          <input type="password" formControlName="password" required id="password" class="fade-in third form-input" name="password"
+            placeholder="senha">
+          <div class="form-control-feedback" *ngIf="password?.errors && (password?.dirty || password?.touched)">
+            <p *ngIf="password?.errors?.required">Campo obrigatório</p>
+            <p *ngIf="password?.errors?.minlength">A senha deve ter 8 caracteres, no mínimo. Falta mais
+              {{password?.errors?.minlength?.requiredLength - password?.errors?.minlength?.actualLength}} para a
+              quantidade mínima</p>
+          </div>
+        </div>
+        <input type="submit" class="fade-in fourth" value="Log In">
+      </form>
+
+      <!-- Remind Passowrd -->
+      <div id="form-footer" class="d-flex flex-column justify-content-between">
+        <div>
+          <span>Não tem uma conta? </span><a routerLink="/signup" routerLinkActive="selected" class="underline-hover" href="javascript: void(0);">Registrar</a>
+        </div>
+        <div>
+          <a class="underline-hover" href="javascript: void(0);">Esqueceu a senha?</a>
+        </div>
+      </div>
+
     </div>
-
-    <!-- Login Form -->
-    <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-      <input type="password" id="password" class="fadeIn third" name="login" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
-    </form>
-
-    <!-- Remind Passowrd -->
-    <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a>
-    </div>
-
   </div>
 </div>
