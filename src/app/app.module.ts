@@ -9,18 +9,24 @@ import { HomeComponent } from './pages/home/home.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './services/authentication/auth.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    HomeComponent
+    HomeComponent,
+    SidebarComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthenticationGuard,
