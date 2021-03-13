@@ -6,6 +6,9 @@ import { User } from 'src/app/users/user/shared/user.model';
 import { Token } from 'src/app/users/user/shared/token.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/users/user/shared/user.service';
+import { LoginService } from 'src/app/pages/login/login.service';
+import { UserDTO } from 'src/app/users/user/shared/user-dto.model';
 
 @Injectable()
 export class AuthService {
@@ -29,25 +32,29 @@ export class AuthService {
   constructor(
     private router: Router,
     private localStorage: LocalStorage,
-    private http: HttpClient
+    private loginService: LoginService
   ) {}
 
   async login(user: User) {
     if (user?.username !== '' && user?.password !== '' ) {
-      await this.requestToken(user);
+      const token: Token = (await this.requestToken(user)) as Token;
 
-      if (localStorage.getItem(this.tokenKey)) {
+      if (token?.access_token !== null) {
+        await this.storeNewToken(token);
         this.loggedIn.next(true);
-        this.username = user.username;
+        let userDTO: UserDTO = new UserDTO();
+        userDTO.username = user.username
+        await this.router.navigate(['/home', userDTO]);
       }
+    } else {
+      this.logout();
     }
 
-    this.logout();
   }
 
   async logout() {
     await this.removeToken();
-    await this.loggedIn.next(false);
+    this.loggedIn.next(false);
   }
 
   private async storeNewToken(token: Token) {
@@ -60,22 +67,15 @@ export class AuthService {
   }
 
   async requestToken(user: User) {
-    const requestUrl = `${environment.api.baseUrl}/token`;
-
-    const requestData = new HttpParams()
-      .set('username', user.username)
-      .set('password', user.password);
-    const requestHeaders = {
-      headers: new HttpHeaders().set('Content-Type', 'application/json')
-    };
-    //'Content-Type', 'application/x-www-form-urlencoded'
-
     try {
-      const token: Token = (await this.http.post(requestUrl, requestData.toString(), requestHeaders).toPromise()) as Token;
-      await this.storeNewToken(token);
+      const token: Token = (await this.loginService.token(user).toPromise()) as Token;
+      console.log('(authService) token = ', token);
+      return token;
     } catch (err) {
 
     }
+
+    return null;
   }
 
 

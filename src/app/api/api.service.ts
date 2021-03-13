@@ -1,12 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { AuthService } from '../services/authentication/auth.service';
-import { Token } from '../users/user/shared/token.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,57 +13,25 @@ export class Api {
 
   constructor(
     protected http: HttpClient,
-    protected authService: AuthService
   ) {}
-
-  protected getHttpHeaders(): Observable<HttpHeaders> {
-    try {
-      this.authService.getToken()
-      .then((token: Token) => {
-        const header = new HttpHeaders({
-          'Authorization': `Bearer ${token.token}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        });
-        // 'Content-Type', 'application/json'
-        return of(header);
-      })
-
-    } catch (error) {
-      console.log('erro');
-    }
-
-    return of(new HttpHeaders());
-  }
 
   public getBaseUrl() {
     return this.baseUrl;
   }
 
-  public getRequest(url: string, options: any = {}): Observable<any> {
-    return this.getHttpHeaders()
-      .pipe(
-        map((httpHeaders: HttpHeaders) => this.http.get(url, Object.assign({ headers: httpHeaders }, options)))
-      );
+  public getRequest(endpoint: string, options: any = {}): Observable<any> {
+    return this.http.get(`${this.getBaseUrl()}${endpoint}`, Object.assign({ headers: options}));
   }
 
-  public postRequest(url: string, body: any, options: any = {}): Observable<any> {
-    return this.getHttpHeaders()
-      .pipe(
-        map((httpHeaders: HttpHeaders) => this.http.post(url, body, Object.assign({ headers: httpHeaders }, options)))
-      );
+  public postRequest(endpoint: string, body: any, options: any = {}): Observable<any> {
+    return this.http.post(`${this.getBaseUrl()}${endpoint}`, body, Object.assign({ headers: options }));
   }
 
-  public putRequest(url: string, body: any, options: any = {}): Observable<any> {
-    return this.getHttpHeaders()
-      .pipe(
-        map((httpHeaders: HttpHeaders) => this.http.put(url, body, Object.assign({ headers: httpHeaders }, options)))
-      );
+  public putRequest(endpoint: string, body: any, options: any = {}): Observable<any> {
+    return this.http.put(`${this.getBaseUrl()}${endpoint}`, body, Object.assign({ headers: options}));
   }
 
-  public deleteRequest(url: string, options: any = {}): Observable<any> {
-    return this.getHttpHeaders()
-      .pipe(
-        map((httpHeaders: HttpHeaders) => this.http.delete(url, Object.assign({ headers: httpHeaders }, options)))
-      );
+  public deleteRequest(endpoint: string, options: any = {}): Observable<any> {
+    return this.http.delete(`${this.getBaseUrl()}${endpoint}`, Object.assign({ headers: options }));
   }
 }
