@@ -8,8 +8,8 @@ import { SignupComponent } from './pages/signup/signup.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: '', component: HomeComponent, canActivate: [AuthenticationGuard] },
-  { path: '**', redirectTo: '' }
+  { path: 'home', component: HomeComponent, canActivate: [AuthenticationGuard] },
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({
